@@ -11,7 +11,7 @@ library(ggplot2)
 
 load("shiny_data.rda")
 
-read.table("prompt_data.txt",header=T) -> full_events_data
+read.table("prompt_data.txt", header=T, sep="\t") -> full_events_data
 
 ##########################################################
 
@@ -96,8 +96,12 @@ normalize_data_scale <- function(var){
 
 full_events_data$time_interval_vec_log = log(full_events_data[,"time_interval_vec"])
 
-# Non significant results, using non-parametric since uniformly distributed rather than normal
-#stat_test = kruskal.test(time_interval_vec_log~effective_prompt_vec, data=full_events_data)
+# Non significant results in time to action in each prompt, using non-parametric since uniformly distributed rather than normal
+stat_test = kruskal.test(time_interval_vec_log~effective_prompt_vec, data=full_events_data)
+
+# Non significant results in proportion of subjects that responded to each prompt
+stat_test2 = chisq.test(summary(data_v8[,"Percentage"]), correct=F, simulate.p.value=T)
+
 
 save.image("shiny_data_v2.rda")
 
