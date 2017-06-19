@@ -20,7 +20,7 @@ shinyUI(fluidPage(
 	tags$head(tags$style(".rightAlign{float:right;}")),
 	tags$head(tags$style(".bigMargin{margin-bottom:20px;}")),
 	# Application title
-	titlePanel("Active Pal Data Visualization"),
+	titlePanel("activPAL Data Visualization"),
 	
 	# Sidebar
 	sidebarLayout(
