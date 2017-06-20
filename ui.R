@@ -36,7 +36,7 @@ shinyUI(fluidPage(
 		  conditionalPanel(
 		    condition = "input.tabs == 'norm'",
 		    selectizeInput("prompt","Prompt", choices=unique(full_events_data[,1]), selected=1),
-		  radioButtons("type2", "Normalization Type", choices=c("Log"=1, "Scale"=2), selected=1))
+		  radioButtons("type2", "Normalization Type", choices=c("Log"="log", "Scale"="scale", "Square Root" = "sqrt", "Cubic" = "cubed"), selected="log"))
 		),
 
 		# Main panel with error message and plot
