@@ -52,47 +52,93 @@ p <- ggplot(full_events_data, aes(x=reorder(effective_prompt_vec,-time_interval_
 p + geom_boxplot() + coord_flip() + labs(title = "Distribution of Time to Action for Each Prompt", x=NULL,y="Time Interval (s)") + theme(legend.position="none",text = element_text(size=18))
 
 # Normalization of Data
-normalize_data_log <- function(var){
+# normalize_data_log <- function(var){
+#   
+#   par(mfrow=c(2,2))
+#   
+#   hist(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main=paste(var, "raw"), xlab="")
+#   
+#   hist(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main=paste(var,"log"), xlab="")
+#   
+#   qqnorm(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main="QQ raw",xlab="")
+#   qqline(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var])
+#   
+#   if(sum(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var] == 0) > 0){
+#     log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]) -> x
+#     x[which(x=="-Inf")] <- NA
+#     qqnorm(x, main="QQ Log", xlab="")
+#     qqline(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
+#   }else{
+#     qqnorm(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main="QQ Log", xlab="")
+#     qqline(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
+#   }
+#   
+#   
+#   
+#   
+# }
+# 
+# normalize_data_scale <- function(var){
+#   
+#   par(mfrow=c(2,2))
+#   
+#   hist(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main=paste(var, "raw"), xlab="")
+#   
+#   hist(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main=paste(var,"scale"), xlab="")
+#   
+#   qqnorm(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main="QQ raw",xlab="")
+#   qqline(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var])
+#   
+#   qqnorm(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main="QQ scale", xlab="")
+#   qqline(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
+#   
+# }
+# 
+
+
+cubed <- function(x) x^3
+
+normalize_data_function <- function(var, type=c("log", "scale", "sqrt", "cubed")){
+  
+  function_call <- switch(type, log="log", scale="scale", sqrt="sqrt", cubed="cubed")
+  
   
   par(mfrow=c(2,2))
   
-  hist(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main=paste(var, "raw"), xlab="")
+  x <- full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]
   
-  hist(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main=paste(var,"log"), xlab="")
+  norm_x = do.call(function_call, list(x))
   
-  qqnorm(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main="QQ raw",xlab="")
-  qqline(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var])
   
-  if(sum(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var] == 0) > 0){
-    log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]) -> x
-    x[which(x=="-Inf")] <- NA
-    qqnorm(x, main="QQ Log", xlab="")
-    qqline(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
+  hist(x, main=paste(var, "Raw"), xlab="")
+  
+  hist(norm_x, main=paste(var,type), xlab="")
+  
+  qqnorm(x, main="QQ-Plot Raw",xlab="")
+  qqline(x)
+  
+  if(sum(norm_x == "-Inf") > 0){
+
+    norm_x[which(norm_x=="-Inf")] <- NA
+    qqnorm(norm_x, main=paste("QQ-Plot", type), xlab="")
+    qqline(norm_x)
   }else{
-    qqnorm(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main="QQ Log", xlab="")
-    qqline(log(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
+    qqnorm(norm_x, main=paste("QQ-Plot", type), xlab="")
+    qqline(norm_x)
   }
-  
-  
-  
   
 }
 
-normalize_data_scale <- function(var){
-  
-  par(mfrow=c(2,2))
-  
-  hist(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main=paste(var, "raw"), xlab="")
-  
-  hist(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main=paste(var,"scale"), xlab="")
-  
-  qqnorm(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var], main="QQ raw",xlab="")
-  qqline(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var])
-  
-  qqnorm(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]), main="QQ scale", xlab="")
-  qqline(scale(full_events_data$time_interval_vec[full_events_data$effective_prompt_vec == var]))
-  
-}
+# normalize_data_function(var="PTS says it's time to move!", type="log")
+# 
+# normalize_data_function(var="PTS says it's time to move!", type="scale")
+# 
+# normalize_data_function(var="PTS says it's time to move!", type="sqrt")
+# 
+# normalize_data_function(var="PTS says it's time to move!", type="cubed")
+# 
+
+
 
 full_events_data$time_interval_vec_log = log(full_events_data[,"time_interval_vec"])
 
@@ -101,6 +147,15 @@ stat_test = kruskal.test(time_interval_vec_log~effective_prompt_vec, data=full_e
 
 # Non significant results in proportion of subjects that responded to each prompt
 stat_test2 = chisq.test(summary(data_v8[,"Percentage"]), correct=F, simulate.p.value=T)
+
+
+
+
+
+
+
+
+
 
 
 save.image("shiny_data_v2.rda")
