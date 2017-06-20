@@ -175,11 +175,14 @@ shinyServer(function(input, output, session) {
 	})
 	
 	output$norm_plot <- renderPlot({
-	  if(input$type2 == 1){
-	    normalize_data_log(input$prompt)
-	  }else if (input$type2 == 2){
-	    normalize_data_scale(input$prompt)
-	  }
+	  
+	  normalize_data_function(var=input$prompt, type=input$type2)
+	  
+	  # if(input$type2 == 1){
+	  #   normalize_data_log(input$prompt)
+	  # }else if (input$type2 == 2){
+	  #   normalize_data_scale(input$prompt)
+	  # }
 	  
 	})
 	
