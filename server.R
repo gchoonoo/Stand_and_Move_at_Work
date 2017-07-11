@@ -170,7 +170,7 @@ shinyServer(function(input, output, session) {
 	
 	output$prompt_plot2 <- renderPlot({
 	  p <- ggplot(full_events_data, aes(x=reorder(effective_prompt_vec,-time_interval_vec,FUN=median),y=time_interval_vec,fill = full_events_data[,5]),legend = NULL)
-	  p + geom_boxplot() + coord_flip() + labs(title = "Distribution of Time to Action for Each Prompt", x=NULL,y="Time Interval (s)") + theme(legend.position="none",text = element_text(size=18))
+	  p + geom_boxplot() + coord_flip() + labs(title = "Distribution of Time to Action for Each Prompt", x=NULL,y="Time Interval (minutes)") + theme(legend.position="none",text = element_text(size=18))
 	  
 	})
 	
