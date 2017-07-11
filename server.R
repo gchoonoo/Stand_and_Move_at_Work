@@ -203,7 +203,7 @@ shinyServer(function(input, output, session) {
 		
 		output$stat2 = renderPrint({
 		  
-		  stat_test2 = chisq.test(summary(data_v2[,1]), correct=F, simulate.p.value=T)
+		  stat_test2 = chisq.test(summary(data_v2[,1]))
 		  stat_test2
 		  
 		})
