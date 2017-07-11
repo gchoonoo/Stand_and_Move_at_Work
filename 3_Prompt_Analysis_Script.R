@@ -19,7 +19,7 @@ read.table("prompt_data.txt", header=T, sep="\t") -> full_events_data
 unique(full_events_data[,c(2,4)]) -> data_v2
 
 # barplot
-summary(data_v2[,1])/length(unique(data_v2[,2])) -> data_v3
+summary(data_v2[,1])/length(unique(data_v2[,2]))*100 -> data_v3
 
 data.frame(Prompt=names(data_v3), Percentage=data_v3) -> data_v4
 
@@ -146,13 +146,7 @@ full_events_data$time_interval_vec_log = log(full_events_data[,"time_interval_ve
 stat_test = kruskal.test(time_interval_vec_log~effective_prompt_vec, data=full_events_data)
 
 # Non significant results in proportion of subjects that responded to each prompt
-stat_test2 = chisq.test(summary(data_v8[,"Percentage"]), correct=F, simulate.p.value=T)
-
-
-
-
-
-
+stat_test2 = chisq.test(summary(data_v2[,1]))
 
 
 
